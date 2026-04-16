@@ -1,6 +1,6 @@
 export type Priority = "high" | "medium" | "low";
 
-export type GoalStatus = "active" | "completed" | "archived";
+export type GoalStatus = "active" | "completed" | "archived" | "failed";
 
 export type ExecutionType = "flashcard" | "reading" | "coding" | "checklist" | "quiz" | "practice";
 
@@ -17,10 +17,10 @@ export interface Task {
 }
 
 export interface ReminderConfig {
-  enabled: boolean; // 是否启用提醒
-  time: string; // HH:mm 格式，如 "09:30"
-  soundId?: string; // 通知音效 ID，默认为 "default"
-  notificationId?: string; // 后台任务 ID
+  enabled: boolean;
+  time: string;
+  soundId?: string;
+  notificationId?: string;
 }
 
 export interface Goal {
@@ -29,15 +29,61 @@ export interface Goal {
   description: string;
   priority: Priority;
   status: GoalStatus;
-  dueDate?: number; // timestamp
+  dueDate?: number;
   createdAt: number;
   updatedAt: number;
   tasks: Task[];
-  reminder?: ReminderConfig; // 每日提醒配置
+  reminder?: ReminderConfig;
+  isHardcore?: boolean;
+  stakedShells?: number;
+  hardcoreSettledAt?: number;
+  hardcoreFailedAt?: number;
+  leaveDaysUsed?: number;
+  makeupUsed?: boolean;
+}
+
+export type ShellTransactionType =
+  | "signup_bonus"
+  | "stake_lock"
+  | "stake_return"
+  | "hardcore_reward"
+  | "normal_reward"
+  | "stake_burn"
+  | "purchase_leave_card"
+  | "purchase_makeup_card"
+  | "purchase_ai_split"
+  | "purchase_theme"
+  | "purchase_sound"
+  | "use_leave_card"
+  | "use_makeup_card"
+  | "use_ai_split"
+  | "membership_bonus";
+
+export interface ShellTransaction {
+  id: string;
+  type: ShellTransactionType;
+  amount: number;
+  createdAt: number;
+  goalId?: string;
+  note: string;
+}
+
+export interface ShellWallet {
+  balance: number;
+}
+
+export interface UserInventory {
+  leaveCards: number;
+  makeupCards: number;
+  hardcoreStreak: number;
+  aiSplitsRemaining: number;
+  unlockedThemes: string[];
+  unlockedSounds: string[];
+  isPremium: boolean;
 }
 
 export interface DailyStats {
-  date: string; // YYYY-MM-DD
+  date: string;
   completedTasks: number;
   totalTasks: number;
 }

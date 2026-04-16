@@ -51,15 +51,19 @@ export default function ThemeLabScreen() {
     return {
       light: build("light"),
       dark: build("dark"),
-    };
+      forest: build("forest"),
+      sunset: build("sunset"),
+      midnight: build("midnight"),
+      pink: build("pink"),
+    } as Record<ColorScheme, any>;
   }, []);
 
   return (
     <ScreenContainer className="p-5">
       <ScrollView className="flex-1">
-        <View className="gap-4 pb-8">
-          <View className="flex-row gap-2">
-            {(["light", "dark"] as ColorScheme[]).map((scheme) => (
+        <View style={{ gap: 16, paddingBottom: 32 }}>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+            {(["light", "dark", "forest", "sunset", "midnight", "pink"] as ColorScheme[]).map((scheme) => (
               <Pressable
                 key={scheme}
                 style={[

@@ -4,18 +4,18 @@ import * as Speech from "expo-speech";
 import { useColors } from "@/hooks/use-colors";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { extractLanguageFromTitle, getLanguageTag } from "@/lib/language-utils";
-import { getApiBaseUrl } from "@/constants/oauth";
+import { getApiBaseUrl } from "@/constants/api";
 
 type PracticeItem = string | { title?: string; description?: string; text?: string };
 type PracticePrompt =
   | string
   | {
-      cue?: string;
-      prompt?: string;
-      target?: string;
-      sampleAnswer?: string;
-      tips?: string | string[];
-    };
+    cue?: string;
+    prompt?: string;
+    target?: string;
+    sampleAnswer?: string;
+    tips?: string | string[];
+  };
 
 interface PracticePayload {
   title?: string;
@@ -102,6 +102,7 @@ export function PracticeViewer({
   const [feedback, setFeedback] = useState("");
   const [feedbackError, setFeedbackError] = useState("");
   const [isFeedbackLoading, setIsFeedbackLoading] = useState(false);
+  const [isPassed, setIsPassed] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   const languageName = extractLanguageFromTitle(goalTitle);
@@ -147,6 +148,7 @@ export function PracticeViewer({
     setResponseText("");
     setFeedback("");
     setFeedbackError("");
+    setIsPassed(false);
   };
 
   const requestFeedback = async () => {
@@ -167,7 +169,9 @@ export function PracticeViewer({
 示例答案或动作要点：${sampleAnswer || currentRound.target || "无"}
 用户练习记录：${answer}
 
-请用中文反馈，最多 4 句话。需要判断记录是否具体、是否符合本轮任务；指出做得好的地方、一个最重要的问题、下一轮应该怎么改。语言学习任务可以顺带纠正目标语言表达。`;
+请用中文反馈，最多 4 句话。需要判断记录是否具体、是否符合本轮任务；指出做得好的地方、一个最重要的问题、下一轮应该怎么改。语言学习任务可以顺带纠正目标语言表达。
+
+重要规则：如果用户的记录明显是应付（如字数太少、乱打、说“我不会/不知道”、与任务完全无关等），请在反馈的最后一行写上 [FAILED]，否则写上 [PASSED]。`;
 
       const resp = await fetch(`${getApiBaseUrl()}/api/trpc/ai.chat`, {
         method: "POST",
@@ -183,12 +187,19 @@ export function PracticeViewer({
         throw new Error(data.error.message || "检查失败");
       }
 
-      const content = data?.result?.data?.json?.content;
+      let content = data?.result?.data?.json?.content;
       if (!content) {
-        throw new Error("AI 没有返回反馈内容");
+        throw new Error("系统没有返回反馈内容");
       }
 
-      setFeedback(content.trim());
+      const passed = content.includes("[PASSED]");
+      const failed = content.includes("[FAILED]");
+
+      // Clean up tags from display
+      content = content.replace(/\[PASSED\]|\[FAILED\]/g, "").trim();
+
+      setFeedback(content);
+      setIsPassed(passed && !failed);
     } catch (error) {
       setFeedbackError(error instanceof Error ? error.message : "检查失败");
     } finally {
@@ -298,7 +309,7 @@ export function PracticeViewer({
               setFeedback("");
               setFeedbackError("");
             }}
-            placeholder="把你完成的选择、答案、操作过程或练习结果写在这里，提交给 AI 检查"
+            placeholder="把你完成的选择、答案、操作过程或练习结果写在这里，提交给系统检查"
             placeholderTextColor={colors.muted}
             multiline
             textAlignVertical="top"
@@ -364,9 +375,9 @@ export function PracticeViewer({
           <Pressable
             style={[
               styles.primaryBtn,
-              { backgroundColor: feedback ? colors.primary : responseText.trim() ? colors.warning : colors.border },
+              { backgroundColor: feedback ? (isPassed ? colors.primary : colors.error) : responseText.trim() ? colors.warning : colors.border },
             ]}
-            onPress={feedback ? handleNext : requestFeedback}
+            onPress={feedback ? (isPassed ? handleNext : () => setFeedback("")) : requestFeedback}
             disabled={!feedback && (!responseText.trim() || isFeedbackLoading)}
           >
             {isFeedbackLoading ? (
@@ -380,11 +391,13 @@ export function PracticeViewer({
             )}
             <Text style={styles.primaryBtnText}>
               {feedback
-                ? currentIndex < rounds.length - 1
-                  ? "下一轮"
-                  : "完成练习"
+                ? isPassed
+                  ? currentIndex < rounds.length - 1
+                    ? "下一轮"
+                    : "完成练习"
+                  : "重做本轮"
                 : isFeedbackLoading
-                  ? "AI 检查中"
+                  ? "系统检查中"
                   : "提交检查"}
             </Text>
           </Pressable>

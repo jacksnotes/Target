@@ -16,6 +16,9 @@ describe("Sound Configuration", () => {
       "ping",
       "pop",
       "alert",
+      "zen",
+      "dawn",
+      "crystal",
     ];
 
     soundIds.forEach((id) => {
@@ -25,7 +28,7 @@ describe("Sound Configuration", () => {
       expect(SOUND_OPTIONS[id].description).toBeDefined();
       expect(SOUND_OPTIONS[id].fileName).toBeDefined();
       expect(SOUND_OPTIONS[id].duration).toBeGreaterThan(0);
-      expect(["soft", "medium", "loud"]).toContain(SOUND_OPTIONS[id].category);
+      expect(["basic", "premium"]).toContain(SOUND_OPTIONS[id].category);
     });
   });
 
@@ -55,22 +58,22 @@ describe("Sound Configuration", () => {
 });
 
 describe("Sound Priority Recommendation", () => {
-  it("should recommend soft sound for low priority", () => {
+  it("should recommend basic sound for low priority", () => {
     const soundId = getRecommendedSoundForPriority("low");
     const option = SOUND_OPTIONS[soundId];
-    expect(option.category).toBe("soft");
+    expect(option.category).toBe("basic");
   });
 
-  it("should recommend medium sound for medium priority", () => {
+  it("should recommend basic sound for medium priority", () => {
     const soundId = getRecommendedSoundForPriority("medium");
     const option = SOUND_OPTIONS[soundId];
-    expect(option.category).toBe("medium");
+    expect(option.category).toBe("basic");
   });
 
-  it("should recommend loud sound for high priority", () => {
+  it("should recommend basic sound for high priority", () => {
     const soundId = getRecommendedSoundForPriority("high");
     const option = SOUND_OPTIONS[soundId];
-    expect(option.category).toBe("loud");
+    expect(option.category).toBe("basic");
   });
 
   it("should return default for unknown priority", () => {
@@ -89,6 +92,9 @@ describe("Sound ID Validation", () => {
       "ping",
       "pop",
       "alert",
+      "zen",
+      "dawn",
+      "crystal",
     ];
 
     validIds.forEach((id) => {
@@ -114,24 +120,17 @@ describe("Sound ID Validation", () => {
 });
 
 describe("Sound Categories", () => {
-  it("should have at least one soft sound", () => {
-    const softSounds = Object.values(SOUND_OPTIONS).filter(
-      (opt) => opt.category === "soft"
+  it("should have basic sounds", () => {
+    const basicSounds = Object.values(SOUND_OPTIONS).filter(
+      (opt) => opt.category === "basic"
     );
-    expect(softSounds.length).toBeGreaterThan(0);
+    expect(basicSounds.length).toBeGreaterThan(0);
   });
 
-  it("should have at least one medium sound", () => {
-    const mediumSounds = Object.values(SOUND_OPTIONS).filter(
-      (opt) => opt.category === "medium"
+  it("should have premium sounds", () => {
+    const premiumSounds = Object.values(SOUND_OPTIONS).filter(
+      (opt) => opt.category === "premium"
     );
-    expect(mediumSounds.length).toBeGreaterThan(0);
-  });
-
-  it("should have at least one loud sound", () => {
-    const loudSounds = Object.values(SOUND_OPTIONS).filter(
-      (opt) => opt.category === "loud"
-    );
-    expect(loudSounds.length).toBeGreaterThan(0);
+    expect(premiumSounds.length).toBeGreaterThan(0);
   });
 });

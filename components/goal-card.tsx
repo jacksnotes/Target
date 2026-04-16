@@ -55,14 +55,22 @@ export function GoalCard({ goal, onPress }: GoalCardProps) {
               ]}
             />
           )}
+          {goal.status === "failed" && (
+            <View
+              style={[
+                styles.completedDot,
+                { backgroundColor: colors.error },
+              ]}
+            />
+          )}
           <Text
             style={[
               styles.title,
               {
                 color: colors.foreground,
                 textDecorationLine:
-                  goal.status === "completed" ? "line-through" : "none",
-                opacity: goal.status === "completed" ? 0.6 : 1,
+                  goal.status === "completed" || goal.status === "failed" ? "line-through" : "none",
+                opacity: goal.status === "completed" || goal.status === "failed" ? 0.6 : 1,
               },
             ]}
             numberOfLines={2}
@@ -94,7 +102,11 @@ export function GoalCard({ goal, onPress }: GoalCardProps) {
                 styles.progressFill,
                 {
                   backgroundColor:
-                    goal.status === "completed" ? colors.success : colors.primary,
+                    goal.status === "completed"
+                      ? colors.success
+                      : goal.status === "failed"
+                      ? colors.error
+                      : colors.primary,
                   width: `${progressPercent}%`,
                 },
               ]}
@@ -109,6 +121,23 @@ export function GoalCard({ goal, onPress }: GoalCardProps) {
       {/* Footer */}
       <View style={styles.footer}>
         <PriorityBadge priority={goal.priority} small />
+        {goal.isHardcore && (
+          <View style={styles.dueDate}>
+            <IconSymbol
+              name={goal.status === "failed" ? "xmark.circle.fill" : "flame.fill"}
+              size={10}
+              color={goal.status === "failed" ? colors.error : colors.warning}
+            />
+            <Text
+              style={[
+                styles.dueDateText,
+                { color: goal.status === "failed" ? colors.error : colors.warning },
+              ]}
+            >
+              {goal.status === "failed" ? "硬核失败" : `硬核 · ${goal.stakedShells ?? 100} 贝壳`}
+            </Text>
+          </View>
+        )}
         {dueDateStr && (
           <View style={styles.dueDate}>
             <IconSymbol

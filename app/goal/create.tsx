@@ -19,6 +19,7 @@ import { useGoals } from "@/lib/goals-context";
 import { useColors } from "@/hooks/use-colors";
 import { Priority, Task, ExecutionType } from "@/lib/types";
 import { trpc } from "@/lib/trpc";
+import { AI_SPLIT_PACK_PRICE } from "@/lib/storage";
 
 const PRIORITY_OPTIONS: { value: Priority; label: string; iconName: string }[] = [
   { value: "high", label: "高", iconName: "exclamationmark.circle.fill" },
@@ -29,6 +30,8 @@ const PRIORITY_OPTIONS: { value: Priority; label: string; iconName: string }[] =
 export default function CreateGoalScreen() {
   const colors = useColors();
   const router = useRouter();
+  const { state, consumeAiSplit, purchaseInventoryItem } = useGoals();
+  const { inventory } = state;
   const params = useLocalSearchParams<{
     title?: string;
     description?: string;
@@ -62,6 +65,25 @@ export default function CreateGoalScreen() {
       Alert.alert("提示", "请先输入学习目标");
       return;
     }
+
+    if (inventory.aiSplitsRemaining <= 0) {
+      Alert.alert(
+        "AI 额度不足",
+        `免费额度已用完，是否花费 ${AI_SPLIT_PACK_PRICE} 贝壳兑换 5 次 AI 拆分权？`,
+        [
+          { text: "取消", style: "cancel" },
+          {
+            text: "立即兑换",
+            onPress: () => {
+              const res = purchaseInventoryItem("ai_split_pack");
+              if (!res.ok) Alert.alert("失败", res.message);
+            }
+          }
+        ]
+      );
+      return;
+    }
+
     setIsGenerating(true);
     try {
       const prompt = `请将学习目标 "${title}" 拆分为 5-8 个具体可执行的任务。
@@ -77,7 +99,7 @@ export default function CreateGoalScreen() {
 
       const content = result.content ?? "";
       let tasks: Partial<Task>[] = [];
-      
+
       try {
         const jsonMatch = content.match(/\[[\s\S]*\]/);
         if (jsonMatch) {
@@ -102,6 +124,7 @@ export default function CreateGoalScreen() {
       if (tasks.length > 0) {
         setSuggestedTasks(tasks);
         setSelectedTasks(new Set(tasks.map((_, i) => i)));
+        consumeAiSplit(); // 消耗一次额度
       } else {
         throw new Error("Invalid AI response");
       }
@@ -485,6 +508,9 @@ export default function CreateGoalScreen() {
               </Text>
             </Pressable>
           </View>
+          <Text style={[styles.aiRemaining, { color: inventory.aiSplitsRemaining > 0 ? colors.muted : colors.error }]}>
+            剩余 AI 拆分额度: {inventory.aiSplitsRemaining} 次
+          </Text>
 
           {suggestedTasks.length > 0 && (
             <View
@@ -601,7 +627,7 @@ export default function CreateGoalScreen() {
             >
               <IconSymbol name="sparkles" size={16} color={colors.primary} />
               <Text style={[styles.aiHintText, { color: colors.primary }]}>
-                输入目标标题后，点击「AI 智能拆分」自动生成学习任务
+                输入目标标题后，点击「智能拆分」自动生成学习任务
               </Text>
             </View>
           )}
@@ -729,6 +755,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "600",
     lineHeight: 18,
+  },
+  aiRemaining: {
+    fontSize: 11,
+    marginTop: 4,
+    textAlign: "right",
   },
   taskSuggestions: {
     borderRadius: 16,

@@ -10,6 +10,9 @@ import { createAudioPlayer, setAudioModeAsync } from "expo-audio";
 import { useColors } from "@/hooks/use-colors";
 import { SOUND_OPTIONS, SoundId } from "@/lib/sound-config";
 import { IconSymbol } from "./ui/icon-symbol";
+import { useGoals } from "@/lib/goals-context";
+import { Alert } from "react-native";
+import { SOUND_PRICE } from "@/lib/storage";
 
 interface SoundPickerProps {
   selectedSoundId?: SoundId;
@@ -23,6 +26,8 @@ export function SoundPicker({
   onPreview,
 }: SoundPickerProps) {
   const colors = useColors();
+  const { state, purchaseInventoryItem } = useGoals();
+  const { inventory } = state;
   const [isPlaying, setIsPlaying] = useState<SoundId | null>(null);
   const playerRef = useRef<ReturnType<typeof createAudioPlayer> | null>(null);
   const stopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -91,7 +96,29 @@ export function SoundPicker({
         {Object.entries(SOUND_OPTIONS).map(([soundId, option]) => (
           <Pressable
             key={soundId}
-            onPress={() => onSoundSelect(soundId as SoundId)}
+            onPress={() => {
+              const isBasic = option.category === "basic";
+              const isUnlocked = isBasic || soundId === "default" || inventory.unlockedSounds.includes(soundId);
+              if (!isUnlocked) {
+                Alert.alert(
+                  "解锁高级音效",
+                  `此高级音效尚未解锁，是否花费 ${SOUND_PRICE} 贝壳永久解锁？`,
+                  [
+                    { text: "取消", style: "cancel" },
+                    { 
+                      text: "立即解锁", 
+                      onPress: () => {
+                        const res = purchaseInventoryItem("sound", soundId);
+                        if (res.ok) onSoundSelect(soundId as SoundId);
+                        else Alert.alert("提示", res.message);
+                      }
+                    }
+                  ]
+                );
+                return;
+              }
+              onSoundSelect(soundId as SoundId);
+            }}
             style={({ pressed }) => [
               styles.soundItem,
               {
@@ -105,9 +132,16 @@ export function SoundPicker({
           >
             <View style={styles.soundItemContent}>
               <View style={styles.soundInfo}>
+                <View style={styles.soundNameRow}>
                 <Text style={[styles.soundName, { color: colors.foreground }]}> 
                   {option.name}
                 </Text>
+                {option.category === "premium" && !inventory.unlockedSounds.includes(soundId) && (
+                  <View style={[styles.premiumBadge, { backgroundColor: "#F59E0B" }]}>
+                    <IconSymbol name="lock.fill" size={10} color="#fff" />
+                  </View>
+                )}
+                </View>
                 <Text style={[styles.soundDesc, { color: colors.muted }]}> 
                   {option.description}
                 </Text>
@@ -150,11 +184,9 @@ export function SoundPicker({
                 styles.categoryBadge,
                 {
                   backgroundColor:
-                    option.category === "soft"
-                      ? "#e8f5e9"
-                      : option.category === "medium"
-                        ? "#fff3e0"
-                        : "#ffebee",
+                    option.category === "premium"
+                      ? "#fff3e0"
+                      : "#e8f5e9",
                 },
               ]}
             >
@@ -163,19 +195,16 @@ export function SoundPicker({
                   styles.categoryText,
                   {
                     color:
-                      option.category === "soft"
-                        ? "#2e7d32"
-                        : option.category === "medium"
-                          ? "#e65100"
-                          : "#c62828",
+                      option.category === "premium"
+                        ? "#e65100"
+                        : "#2e7d32",
                   },
                 ]}
               >
-                {option.category === "soft"
-                  ? "\u67d4\u548c"
-                  : option.category === "medium"
-                    ? "\u4e2d\u7b49"
-                    : "\u9192\u76ee"}              </Text>
+                {option.category === "premium"
+                  ? "高级音效"
+                  : "经典音效"}
+              </Text>
             </View>
           </Pressable>
         ))}
@@ -183,11 +212,13 @@ export function SoundPicker({
 
       <View style={[styles.infoBox, { backgroundColor: colors.surface, borderColor: colors.border }]}> 
         <IconSymbol name="info.circle" size={16} color={colors.muted} />
-        <Text style={[styles.infoText, { color: colors.muted }]}>{"\u97f3\u6548\u65f6\u957f\uff1a"}{SOUND_OPTIONS[selectedSoundId].duration}ms</Text>
+        <Text style={[styles.infoText, { color: colors.muted }]}>{"音效时长："}{SOUND_OPTIONS[selectedSoundId].duration}ms</Text>
       </View>
     </View>
   );
 }
+
+
 
 const TONE_CONFIG: Record<
   SoundId,
@@ -200,6 +231,9 @@ const TONE_CONFIG: Record<
   ping: { frequency: 1200, durationMs: 600 },
   pop: { frequency: 520, durationMs: 700, secondFrequency: 780 },
   alert: { frequency: 440, durationMs: 2000, secondFrequency: 880 },
+  zen: { frequency: 261, durationMs: 3000, secondFrequency: 392 }, // C4, G4
+  dawn: { frequency: 440, durationMs: 2500, secondFrequency: 523 }, // A4, C5
+  crystal: { frequency: 987, durationMs: 1800, secondFrequency: 1479 }, // B5, F#6
 };
 
 function createToneDataUri(soundId: SoundId): string {
@@ -308,6 +342,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 20,
   },
+  soundNameRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
   soundDesc: {
     fontSize: 12,
     lineHeight: 16,
@@ -353,5 +392,10 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 12,
     lineHeight: 16,
+  },
+  premiumBadge: {
+    padding: 4,
+    borderRadius: 4,
+    marginLeft: 4,
   },
 });

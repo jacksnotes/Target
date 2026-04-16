@@ -17,6 +17,8 @@ export interface PlanTemplate {
   aiContext: string;
   /** 用户现状问卷选项 */
   levelOptions: { label: string; value: string }[];
+  /** 计划特色权益 */
+  benefits?: { icon: string; text: string }[];
 }
 
 export interface PlanCategory {
@@ -91,6 +93,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "有一定基础，通过了英语六级", value: "intermediate" },
       { label: "已有翻译经验，冲刺高分", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "全真翻译考试环境深度模拟" },
+      { icon: "list.bullet.rectangle.fill", text: "核心高频词汇精准背诵" },
+      { icon: "waveform.path.ecg", text: "口译影子练习专项训练" },
+      { icon: "checkmark.seal.fill", text: "CATTI 考试仿真模拟测试" },
+    ],
   },
   {
     id: "translator-fr",
@@ -107,6 +115,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "零基础", value: "beginner" },
       { label: "学过一些基础（A1-A2）", value: "intermediate" },
       { label: "有较好基础（B1+）", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "法语精华语法点拨与逻辑拆解" },
+      { icon: "speaker.wave.2.fill", text: "标准法语真人发音纠错" },
+      { icon: "doc.plaintext.fill", text: "DALF 高阶写作语料库积累" },
+      { icon: "sparkles", text: "情景化口语模拟实战" },
     ],
   },
   {
@@ -125,6 +139,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "学过基础（A1-A2）", value: "intermediate" },
       { label: "有较好基础（B1+）", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "德语核心语法与句法逻辑拆解" },
+      { icon: "list.bullet.indent", text: "TestDaF 核心高频词汇集" },
+      { icon: "mic.fill", text: "德式发音精准修正练习" },
+      { icon: "newspaper.fill", text: "德语原版阅读专项训练" },
+    ],
   },
   {
     id: "translator-es",
@@ -141,6 +161,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "零基础", value: "beginner" },
       { label: "学过基础", value: "intermediate" },
       { label: "有较好基础", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "西语常用动词变位专项强化" },
+      { icon: "bubble.left.and.bubble.right.fill", text: "DELE 考前模拟口语对练" },
+      { icon: "music.note", text: "拉美与西班牙文化地道语感" },
+      { icon: "checkmark.seal.fill", text: "备考全真模拟试题解析" },
     ],
   },
   {
@@ -159,6 +185,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "认识字母", value: "intermediate" },
       { label: "能简单对话", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "阿语标准发音与字母书写指导" },
+      { icon: "character.book.closed.fill", text: "标准现代阿拉伯语词汇库" },
+      { icon: "music.note.list", text: "地道阿拉伯文化语境融入" },
+      { icon: "mic.fill", text: "阿语喉音纠错与口语练习" },
+    ],
   },
   {
     id: "translator-zh",
@@ -175,6 +207,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "零基础", value: "beginner" },
       { label: "HSK 1-2 水平", value: "intermediate" },
       { label: "HSK 3+ 水平", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "HSK 各级核心词汇分层拆解" },
+      { icon: "character.cursor.ibeam", text: "汉字笔画与书写规范指导" },
+      { icon: "bubble.left.and.bubble.right.fill", text: "真实社交场景口语实战" },
+      { icon: "checkmark.seal.fill", text: "HSK 考前模拟与全题型解析" },
     ],
   },
   {
@@ -193,6 +231,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "N4-N3 水平", value: "intermediate" },
       { label: "N2 冲刺 N1", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "日语全景语法体系结构化梳理" },
+      { icon: "list.bullet.rectangle.portrait.fill", text: "JLPT N1/N2 考点专项攻克" },
+      { icon: "speaker.wave.2.fill", text: "标准东京音朗读与跟读练习" },
+      { icon: "book.fill", text: "原版读物进阶阅读技巧" },
+    ],
   },
   {
     id: "translator-kr",
@@ -209,6 +253,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "零基础", value: "beginner" },
       { label: "认识韩文字母", value: "intermediate" },
       { label: "能简单对话", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "韩文字母趣味快速入门记忆" },
+      { icon: "play.tv.fill", text: "韩剧/综地道表达沉淀" },
+      { icon: "music.mic", text: "标准首尔音对话模拟" },
+      { icon: "checkmark.seal.fill", text: "TOPIK 考试全流程提分方案" },
     ],
   },
   {
@@ -227,6 +277,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "认识字母", value: "intermediate" },
       { label: "能简单对话", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "俄语字母与变形规则实时辅助" },
+      { icon: "doc.text.fill", text: "经典俄语读物与语料积累" },
+      { icon: "mic.fill", text: "多重复合音纠偏与发音指导" },
+      { icon: "info.circle.fill", text: "俄语国家文化深度背景解读" },
+    ],
   },
   {
     id: "translator-pt",
@@ -244,6 +300,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "有一定基础", value: "intermediate" },
       { label: "能简单对话", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "葡语欧标/巴标口音智能适配" },
+      { icon: "bubble.left.and.bubble.right.fill", text: "日常社交高频短语背诵" },
+      { icon: "music.note", text: "葡语音乐与文化情境教学" },
+      { icon: "checkmark.circle.fill", text: "实用商务/旅行葡语专项" },
+    ],
   },
   {
     id: "translator-it",
@@ -260,6 +322,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "零基础", value: "beginner" },
       { label: "有一定基础", value: "intermediate" },
       { label: "能简单对话", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "意语地道发音规则快速通关" },
+      { icon: "fork.knife", text: "地道意式美食与旅行文化" },
+      { icon: "bubble.left.and.bubble.right.fill", text: "即刻口语输出模拟系统" },
+      { icon: "doc.text.image.fill", text: "意语艺术与歌剧词库拓展" },
     ],
   },
   // === 金融分析师 ===
@@ -279,6 +347,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "有金融/会计背景", value: "intermediate" },
       { label: "已通过 CFA Level 1", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "CFA 十大科目核心考点精准拆解" },
+      { icon: "chart.line.uptrend.xyaxis", text: "金融估值模型实战演练" },
+      { icon: "list.bullet.clipboard.fill", text: "全美/德财务框架对比学习" },
+      { icon: "checkmark.seal.fill", text: "海量真题智能组卷与测评" },
+    ],
   },
   // === 考公考编 ===
   {
@@ -296,6 +370,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "第一次备考", value: "beginner" },
       { label: "考过一次，想提高", value: "intermediate" },
       { label: "有基础，冲刺高分", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "行测全题型分阶万能模版" },
+      { icon: "pencil.and.outline", text: "申论核心论点与逻辑构建" },
+      { icon: "newspaper.fill", text: "时政热点每日追踪解读" },
+      { icon: "clock.badge.checkmark", text: "考前封闭式刷题冲刺计划" },
     ],
   },
   // === PMP ===
@@ -315,6 +395,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "有 1-3 年项目经验", value: "intermediate" },
       { label: "有丰富项目经验", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "PMBOK 知识内核深度逻辑解析" },
+      { icon: "rectangle.stack.fill", text: "十大知识领域系统化拆解" },
+      { icon: "person.2.fill", text: "敏捷/瀑布混合项目实战" },
+      { icon: "checkmark.seal.fill", text: "全真官方题库智能推送" },
+    ],
   },
   // === 雅思 ===
   {
@@ -332,6 +418,12 @@ const CAREER_PLANS: PlanTemplate[] = [
       { label: "英语基础一般（四级水平）", value: "beginner" },
       { label: "英语较好（六级水平）", value: "intermediate" },
       { label: "英语优秀，冲刺 7.5+", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "雅思口语全场景深度模拟对练" },
+      { icon: "pencil.tip.crop.circle.fill", text: "精细化作文批改与逻辑提示" },
+      { icon: "headphones", text: "听力同义替换专项训练" },
+      { icon: "star.fill", text: "满分学员同款备考经沉淀" },
     ],
   },
 ];
@@ -356,6 +448,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "了解基本概念", value: "intermediate" },
       { label: "有其他语言基础", value: "advanced" },
     ],
+    benefits: [
+      { icon: "chevron.left.forwardslash.chevron.right", text: "工业级代码片段实战" },
+      { icon: "terminal.fill", text: "端内模拟仿真运行反馈" },
+      { icon: "brain", text: "代码逻辑错误实时纠察" },
+      { icon: "book.fill", text: "系统化理论知识沉淀" },
+    ],
   },
   {
     id: "dev-java",
@@ -372,6 +470,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "编程零基础", value: "beginner" },
       { label: "了解基本编程概念", value: "intermediate" },
       { label: "有其他语言经验", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "terminal.fill", text: "Java 企业级核心代码规范" },
+      { icon: "square.stack.3d.up.fill", text: "Spring Boot 核心原理拆解" },
+      { icon: "cpu", text: "JVM 调优与并发模型分析" },
+      { icon: "cloud.fill", text: "后端微服务架构演进学习" },
     ],
   },
   {
@@ -390,6 +494,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "了解 C 语言", value: "intermediate" },
       { label: "有编程基础", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "C++ 内存模型与底层指针解析" },
+      { icon: "list.bullet.indent", text: "STL 标准库核心算法实战" },
+      { icon: "hammer.fill", text: "工业级 C++ 工程项目实践" },
+      { icon: "checkmark.seal.fill", text: "大厂面试级算法题库训练" },
+    ],
   },
   {
     id: "dev-js",
@@ -406,6 +516,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "编程零基础", value: "beginner" },
       { label: "了解 HTML/CSS", value: "intermediate" },
       { label: "有前端基础", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "chevron.left.forwardslash.chevron.right", text: "现代 ES6+ 语法深度实践" },
+      { icon: "terminal.fill", text: "Node.js 全栈服务端开发实战" },
+      { icon: "brain", text: "JS 异步编程高难点专项攻克" },
+      { icon: "app.badge.fill", text: "完整全栈项目从零构建" },
     ],
   },
   {
@@ -424,6 +540,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "有前端开发经验", value: "intermediate" },
       { label: "有 React 基础", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "React Hooks 状态管理深度教程" },
+      { icon: "iphone", text: "React Native 跨端开发实战" },
+      { icon: "sparkles", text: "React 组件性能优化进阶指导" },
+      { icon: "circle.grid.3x3.fill", text: "复杂 UI 交互设计实战演练" },
+    ],
   },
   {
     id: "dev-go",
@@ -440,6 +562,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "编程零基础", value: "beginner" },
       { label: "有其他语言基础", value: "intermediate" },
       { label: "有后端开发经验", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "Go 并发编程模型深度指南" },
+      { icon: "shippingbox.fill", text: "微服务架构与云原生实践" },
+      { icon: "bolt.fill", text: "高并发中间件开发实战" },
+      { icon: "checkmark.circle.fill", text: "Go 语言核心源码剖析" },
     ],
   },
   {
@@ -458,6 +586,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "有其他语言经验", value: "intermediate" },
       { label: "有系统编程经验", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "Rust 所有权模型深度动态分析" },
+      { icon: "shield.fill", text: "内存安全编程深度实践" },
+      { icon: "terminal.fill", text: "高性能系统组件从零构建" },
+      { icon: "checkmark.seal.fill", text: "Rust 生态核心库深度应用" },
+    ],
   },
   {
     id: "dev-swift",
@@ -474,6 +608,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "编程零基础", value: "beginner" },
       { label: "有编程基础", value: "intermediate" },
       { label: "有移动端经验", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "SwiftUI 声明式 UI 最佳实践案例" },
+      { icon: "iphone.homebutton", text: "iOS 核心框架开发能力提升" },
+      { icon: "sparkles", text: "Apple 设计规范深度适配指导" },
+      { icon: "arrow.up.doc.fill", text: "App Store 上架全流程攻略" },
     ],
   },
   {
@@ -492,6 +632,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "有 Java 基础", value: "intermediate" },
       { label: "有移动端经验", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "Kotlin 核心协程并发难题攻克" },
+      { icon: "android.fill", text: "Jetpack Compose 现代化开发" },
+      { icon: "hammer.fill", text: "Android 系统底层架构认知" },
+      { icon: "play.circle.fill", text: "Google Play 发布实战指南" },
+    ],
   },
   {
     id: "dev-sql",
@@ -509,6 +655,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "会基本查询", value: "intermediate" },
       { label: "想深入优化", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "SQL 查询性能深度调优实战" },
+      { icon: "tablecells.fill", text: "复杂多表联查逻辑拆解" },
+      { icon: "wrench.and.screwdriver.fill", text: "数据库索引与范式设计精要" },
+      { icon: "checkmark.circle.fill", text: "主流数据库实操案例库" },
+    ],
   },
   {
     id: "dev-typescript",
@@ -525,6 +677,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "了解 JavaScript", value: "beginner" },
       { label: "有 JS 项目经验", value: "intermediate" },
       { label: "想深入类型系统", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "TS 高级泛型与类型系统拆解" },
+      { icon: "shield.checkerboard", text: "类型安全编程思维深度培养" },
+      { icon: "wrench.fill", text: "复杂业务模型类型定义实战" },
+      { icon: "checkmark.circle.fill", text: "TS 编译配置与最佳实践指南" },
     ],
   },
   // === 自媒体与设计 ===
@@ -544,6 +702,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "会基础剪切拼接", value: "intermediate" },
       { label: "想提升到专业水平", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "智能镜头剪辑点识别与建议" },
+      { icon: "film.fill", text: "电影感调色与特效进阶教程" },
+      { icon: "waveform", text: "音频处理与蒙太奇节奏掌控" },
+      { icon: "play.rectangle.on.rectangle.fill", text: "各大平台流量算法与发布策略" },
+    ],
   },
   {
     id: "uiux-design",
@@ -560,6 +724,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "完全零基础", value: "beginner" },
       { label: "了解基本工具", value: "intermediate" },
       { label: "有一定审美基础", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "UI/UX 核心交互逻辑走查分析" },
+      { icon: "paintbrush.fill", text: "Figma 高级组件化系统构建" },
+      { icon: "person.fill.viewfinder", text: "真实用户体验测试与改进方案" },
+      { icon: "briefcase.fill", text: "大厂设计师作品集打造指导" },
     ],
   },
   // === 小语种日常会话 ===
@@ -579,6 +749,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "知道一些基本词汇", value: "intermediate" },
       { label: "能简单自我介绍", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "法语高频生活词汇联想记忆" },
+      { icon: "mouth.fill", text: "地道法语俚语与口语语感培养" },
+      { icon: "bubble.left.and.bubble.right.fill", text: "真实餐厅/求职场景模拟对练" },
+      { icon: "info.circle.fill", text: "法语国家生活实用指南沉淀" },
+    ],
   },
   {
     id: "lang-japanese-convo",
@@ -595,6 +771,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "完全零基础", value: "beginner" },
       { label: "知道五十音", value: "intermediate" },
       { label: "能简单自我介绍", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "日语五十音图趣味记忆法" },
+      { icon: "play.tv.fill", text: "动漫/日剧地道表达学习" },
+      { icon: "mouth.fill", text: "标准东京音口语模拟训练" },
+      { icon: "character.book.closed.fill", text: "常用生活汉字快速识记" },
     ],
   },
   // === 生活技能 ===
@@ -614,6 +796,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "会做简单的菜", value: "intermediate" },
       { label: "想提升厨艺", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "烹饪逻辑与调味科学深度解析" },
+      { icon: "flame.fill", text: "火候与刀工基础专项视频引导" },
+      { icon: "leaf.fill", text: "健康食材选购与预处理指南" },
+      { icon: "fork.knife", text: "20+ 家常菜系实战食谱打卡" },
+    ],
   },
   {
     id: "photography",
@@ -630,6 +818,12 @@ const LIFE_SKILLS_PLANS: PlanTemplate[] = [
       { label: "只会随手拍", value: "beginner" },
       { label: "了解基本构图", value: "intermediate" },
       { label: "有相机想深入", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "摄影视觉美学与构图逻辑指导" },
+      { icon: "camera.fill", text: "相机档位（M/Av/Tv）实战教程" },
+      { icon: "sun.max.fill", text: "光影处理与色彩感知力培养" },
+      { icon: "slider.horizontal.3", text: "手机/专业软件后期修图思路" },
     ],
   },
 ];
@@ -654,6 +848,12 @@ const FITNESS_PLANS: PlanTemplate[] = [
       { label: "能跑 5-10 公里", value: "intermediate" },
       { label: "能跑 10km+，冲半马PB", value: "advanced" },
     ],
+    benefits: [
+      { icon: "figure.run", text: "专业化周期性马拉松拉练指导" },
+      { icon: "heart.text.square.fill", text: "运动心率与体能分析建议" },
+      { icon: "flame.fill", text: "个性化补给与恢复方案提示" },
+      { icon: "medal.fill", text: "完赛奖牌成就体系激励" },
+    ],
   },
   {
     id: "running-5k",
@@ -670,6 +870,12 @@ const FITNESS_PLANS: PlanTemplate[] = [
       { label: "完全不跑步", value: "beginner" },
       { label: "能跑 1-2 公里", value: "intermediate" },
       { label: "能跑 3 公里以上", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "figure.run", text: "科学走跑结合体能提升方案" },
+      { icon: "heart.fill", text: "有氧耐力基础循序渐进" },
+      { icon: "clock.fill", text: "每日跑步节奏与配速掌握" },
+      { icon: "checkmark.circle.fill", text: "连续 5 公里完赛成就体系" },
     ],
   },
   // === 体态矫正与减脂 ===
@@ -689,6 +895,12 @@ const FITNESS_PLANS: PlanTemplate[] = [
       { label: "偶尔运动", value: "intermediate" },
       { label: "有运动习惯", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "人体核心集群发力逻辑解析" },
+      { icon: "dumbbell.fill", text: "腰腹力量与脊柱稳定性训练" },
+      { icon: "figure.walk", text: "居家徒手训练动作图解" },
+      { icon: "star.fill", text: "21 天力量蜕变进度可视化" },
+    ],
   },
   {
     id: "posture-fix",
@@ -705,6 +917,12 @@ const FITNESS_PLANS: PlanTemplate[] = [
       { label: "圆肩驼背严重", value: "beginner" },
       { label: "轻微体态不良", value: "intermediate" },
       { label: "想预防和优化", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "figure.stand", text: "体态缺陷视觉对比与改进建议" },
+      { icon: "clock.badge.checkmark", text: "每日碎片化拉伸动作打卡" },
+      { icon: "star.fill", text: "从核心激活到形态稳固训练" },
+      { icon: "person.fill.viewfinder", text: "长期体态评估报告追踪" },
     ],
   },
   // === 作息重塑 ===
@@ -724,6 +942,12 @@ const FITNESS_PLANS: PlanTemplate[] = [
       { label: "12点左右但不规律", value: "intermediate" },
       { label: "想进一步优化睡眠质量", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "睡眠驱动力规律重塑专家建议" },
+      { icon: "bed.double.fill", text: "睡前仪式感清单建立" },
+      { icon: "moon.stars.fill", text: "科学光线与噪音管控策略" },
+      { icon: "checkmark.seal.fill", text: "21 天健康生物钟养成" },
+    ],
   },
   // === 其他运动健康 ===
   {
@@ -742,6 +966,12 @@ const FITNESS_PLANS: PlanTemplate[] = [
       { label: "偶尔练习", value: "intermediate" },
       { label: "有一定基础", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "瑜伽体式与呼吸深度配合指导" },
+      { icon: "heart.fill", text: "柔韧性与肌肉力量双重提升" },
+      { icon: "sparkles", text: "身心专注与减压放松冥想" },
+      { icon: "figure.walk", text: "每日 15 分钟办公室碎片拉伸" },
+    ],
   },
   {
     id: "meditation",
@@ -759,6 +989,12 @@ const FITNESS_PLANS: PlanTemplate[] = [
       { label: "偶尔尝试过", value: "intermediate" },
       { label: "想深入练习", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "专业引导式正念呼吸训练" },
+      { icon: "sparkles", text: "压力感知与情绪调节技巧" },
+      { icon: "bolt.fill", text: "每日专注力深度提升练习" },
+      { icon: "moon.fill", text: "睡前助眠冥想专项空间" },
+    ],
   },
   {
     id: "fat-loss",
@@ -775,6 +1011,12 @@ const FITNESS_PLANS: PlanTemplate[] = [
       { label: "不了解减脂原理", value: "beginner" },
       { label: "尝试过但效果不佳", value: "intermediate" },
       { label: "想系统化管理", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "科学热量缺口与营养成分计算" },
+      { icon: "flame.fill", text: "高效率燃脂运动组合推荐" },
+      { icon: "leaf.fill", text: "科学减脂食谱与替代方案" },
+      { icon: "chart.bar.fill", text: "每周体脂变化深度分析" },
     ],
   },
 ];
@@ -798,6 +1040,12 @@ const GROWTH_PLANS: PlanTemplate[] = [
       { label: "每月读 1-2 本", value: "intermediate" },
       { label: "想提升阅读效率", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "视觉扫描与指读法专项练习" },
+      { icon: "text.book.closed.fill", text: "每周一书深度逻辑图谱拆解" },
+      { icon: "pencil.and.outline", text: "快速提取核心观点与金句" },
+      { icon: "star.fill", text: "高效读书笔记模版库共享" },
+    ],
   },
   {
     id: "public-speaking",
@@ -814,6 +1062,12 @@ const GROWTH_PLANS: PlanTemplate[] = [
       { label: "非常害怕公开发言", value: "beginner" },
       { label: "能发言但不自信", value: "intermediate" },
       { label: "想提升演讲技巧", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "演讲稿逻辑框架深度优化建议" },
+      { icon: "mic.fill", text: "语音语调与重音纠偏练习" },
+      { icon: "eye.fill", text: "克服社交焦虑的心理暗示法" },
+      { icon: "person.2.fill", text: "模拟真实听众反馈实战训练" },
     ],
   },
   {
@@ -832,6 +1086,12 @@ const GROWTH_PLANS: PlanTemplate[] = [
       { label: "有记账习惯", value: "intermediate" },
       { label: "想学习投资", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "理财性格与风险承受能力深度分析" },
+      { icon: "banknote.fill", text: "复利曲线与资产配置可视化" },
+      { icon: "list.bullet.clipboard.fill", text: "每日记账习惯与开支走查" },
+      { icon: "checkmark.seal.fill", text: "基础基金/券商入门知识库" },
+    ],
   },
   {
     id: "time-management",
@@ -848,6 +1108,12 @@ const GROWTH_PLANS: PlanTemplate[] = [
       { label: "经常拖延", value: "beginner" },
       { label: "有一定计划性", value: "intermediate" },
       { label: "想系统优化", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "分级识别任务优先级(EIS系统)" },
+      { icon: "clock.fill", text: "番茄工作法与深度专注模型" },
+      { icon: "list.bullet.rectangle.fill", text: "GTD 待办清单系统化建立" },
+      { icon: "chart.bar.fill", text: "每日时间利用效率度量报告" },
     ],
   },
   {
@@ -866,6 +1132,12 @@ const GROWTH_PLANS: PlanTemplate[] = [
       { label: "偶尔写日记", value: "intermediate" },
       { label: "想提升写作质量", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "写作大纲自动生成与逻辑纠偏" },
+      { icon: "doc.text.fill", text: "多风格文案仿写实战训练" },
+      { icon: "sparkles", text: "遣词造句与修辞技巧进阶" },
+      { icon: "megaphone.fill", text: "新媒体平台运营与输出策略" },
+    ],
   },
   {
     id: "critical-thinking",
@@ -883,6 +1155,12 @@ const GROWTH_PLANS: PlanTemplate[] = [
       { label: "有一定基础", value: "intermediate" },
       { label: "想深入提升", value: "advanced" },
     ],
+    benefits: [
+      { icon: "brain", text: "常见逻辑谬误自动走查与分析" },
+      { icon: "lightbulb.fill", text: "第一性原理与多元思维模型" },
+      { icon: "questionmark.circle.fill", text: "深度提问与批判性阅读练习" },
+      { icon: "checkmark.seal.fill", text: "结构化思考与决策能力测评" },
+    ],
   },
   {
     id: "habit-building",
@@ -899,6 +1177,12 @@ const GROWTH_PLANS: PlanTemplate[] = [
       { label: "经常半途而废", value: "beginner" },
       { label: "能坚持但不稳定", value: "intermediate" },
       { label: "想同时培养多个习惯", value: "advanced" },
+    ],
+    benefits: [
+      { icon: "brain", text: "习惯行为触发器设计与即时提示" },
+      { icon: "checkmark.circle.fill", text: "原子习惯 21 天循序渐进打卡" },
+      { icon: "chart.line.uptrend.xyaxis", text: "习惯复利增长曲线追踪" },
+      { icon: "star.fill", text: "奖励机制与微型胜利反馈" },
     ],
   },
 ];

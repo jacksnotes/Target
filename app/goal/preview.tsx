@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Platform,
+  Alert,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
@@ -14,6 +15,8 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useGoals } from "@/lib/goals-context";
 import { useColors } from "@/hooks/use-colors";
 import { ExecutionType, Priority, Task } from "@/lib/types";
+import { HARDCORE_REWARD_SHELLS, HARDCORE_STAKE_SHELLS } from "@/lib/storage";
+import { getTaskExecutionType } from "@/lib/task-execution";
 
 const EXECUTION_TYPE_INFO: Record<string, { icon: string; label: string; color: string }> = {
   flashcard: { icon: "list.bullet", label: "\u5361\u7247\u5b66\u4e60", color: "#8B5CF6" },
@@ -27,7 +30,8 @@ const EXECUTION_TYPE_INFO: Record<string, { icon: string; label: string; color: 
 export default function GoalPreviewScreen() {
   const colors = useColors();
   const router = useRouter();
-  const { addGoal } = useGoals();
+  const { addGoal, state } = useGoals();
+  const [isHardcore, setIsHardcore] = React.useState(false);
   const params = useLocalSearchParams<{
     title: string;
     description: string;
@@ -49,12 +53,18 @@ export default function GoalPreviewScreen() {
   const dueDate = params.dueDate ? new Date(parseInt(params.dueDate, 10)) : null;
 
   const handleConfirm = () => {
+    if (isHardcore && state.wallet.balance < HARDCORE_STAKE_SHELLS) {
+      Alert.alert("贝壳不足", `开启硬核模式需要冻结 ${HARDCORE_STAKE_SHELLS} 贝壳。当前余额 ${state.wallet.balance} 贝壳。`);
+      return;
+    }
+
     const goalId = addGoal(
       params.title,
       params.description,
       priority,
       dueDate ? dueDate.getTime() : undefined,
-      tasks.map(normalizeTaskBeforeCreate)
+      tasks.map(normalizeTaskBeforeCreate),
+      isHardcore ? { isHardcore: true, stakedShells: HARDCORE_STAKE_SHELLS } : undefined
     );
 
     if (Platform.OS !== "web") {
@@ -152,6 +162,43 @@ export default function GoalPreviewScreen() {
           })}
         </View>
 
+        <View
+          style={[
+            styles.hardcoreCard,
+            {
+              backgroundColor: isHardcore ? colors.warning + "14" : colors.surface,
+              borderColor: isHardcore ? colors.warning : colors.border,
+            },
+          ]}
+        >
+          <View style={styles.hardcoreHeader}>
+            <View style={styles.hardcoreTitleWrap}>
+              <Text style={[styles.hardcoreTitle, { color: colors.foreground }]}>硬核承诺模式</Text>
+              <Text style={[styles.hardcoreBalance, { color: colors.muted }]}>当前余额：{state.wallet.balance} 贝壳</Text>
+            </View>
+            <Pressable
+              onPress={() => setIsHardcore((value) => !value)}
+              style={[
+                styles.switchTrack,
+                { backgroundColor: isHardcore ? colors.warning : colors.border },
+              ]}
+            >
+              <View
+                style={[
+                  styles.switchThumb,
+                  {
+                    backgroundColor: "#fff",
+                    transform: [{ translateX: isHardcore ? 22 : 0 }],
+                  },
+                ]}
+              />
+            </Pressable>
+          </View>
+          <Text style={[styles.hardcoreText, { color: colors.muted }]}>
+            开启后冻结 {HARDCORE_STAKE_SHELLS} 贝壳作为承诺金。按期完成返还承诺金，并奖励 {HARDCORE_REWARD_SHELLS} 贝壳；未完成或主动放弃，承诺金销毁。
+          </Text>
+        </View>
+
         <Pressable
           onPress={handleConfirm}
           style={({ pressed }) => [
@@ -178,15 +225,7 @@ function normalizeTaskBeforeCreate(task: Partial<Task>): Partial<Task> {
 }
 
 function getNormalizedExecutionType(task: Partial<Task>): ExecutionType | undefined {
-  if (task.executionType === "checklist" && isAnalysisTask(task)) {
-    return "practice";
-  }
-  return task.executionType;
-}
-
-function isAnalysisTask(task: Partial<Task>) {
-  const text = `${task.title ?? ""} ${task.description ?? ""}`;
-  return /\u9519\u8bef|\u9519\u9898|\u590d\u76d8|\u5206\u6790/.test(text);
+  return getTaskExecutionType(task) ?? task.executionType;
 }
 
 const styles = StyleSheet.create({
@@ -279,6 +318,45 @@ const styles = StyleSheet.create({
   taskDesc: {
     fontSize: 13,
     marginTop: 2,
+  },
+  hardcoreCard: {
+    borderRadius: 16,
+    borderWidth: 1,
+    padding: 16,
+    gap: 10,
+  },
+  hardcoreHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  hardcoreTitleWrap: {
+    flex: 1,
+    gap: 2,
+  },
+  hardcoreTitle: {
+    fontSize: 17,
+    fontWeight: "700",
+  },
+  hardcoreBalance: {
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  hardcoreText: {
+    fontSize: 14,
+    lineHeight: 22,
+  },
+  switchTrack: {
+    width: 52,
+    height: 30,
+    borderRadius: 15,
+    padding: 3,
+  },
+  switchThumb: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
   },
   confirmBtn: {
     borderRadius: 16,

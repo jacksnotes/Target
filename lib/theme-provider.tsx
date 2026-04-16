@@ -16,12 +16,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [colorScheme, setColorSchemeState] = useState<ColorScheme>(systemScheme);
 
   const applyScheme = useCallback((scheme: ColorScheme) => {
-    nativewindColorScheme.set(scheme);
-    Appearance.setColorScheme?.(scheme);
+    // Basic system level mapping: premium themes are treated as dark variations
+    const systemMappedScheme = (scheme === "light") ? "light" : "dark";
+    nativewindColorScheme.set(systemMappedScheme);
+    Appearance.setColorScheme?.(systemMappedScheme);
+    
     if (typeof document !== "undefined") {
       const root = document.documentElement;
       root.dataset.theme = scheme;
-      root.classList.toggle("dark", scheme === "dark");
+      root.classList.toggle("dark", systemMappedScheme === "dark");
       const palette = SchemeColors[scheme];
       Object.entries(palette).forEach(([token, value]) => {
         root.style.setProperty(`--color-${token}`, value);

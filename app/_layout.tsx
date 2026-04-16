@@ -9,6 +9,8 @@ import { Platform } from "react-native";
 import "@/lib/_core/nativewind-pressable";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { GoalsProvider } from "@/lib/goals-context";
+import { AdaptyProvider } from "@/lib/adapty-context";
+import { AuthProvider, useSupabaseAuth } from "@/lib/auth-context";
 import {
   SafeAreaFrameContext,
   SafeAreaInsetsContext,
@@ -25,11 +27,15 @@ import { useRouter } from "expo-router";
 const DEFAULT_WEB_INSETS: EdgeInsets = { top: 0, right: 0, bottom: 0, left: 0 };
 const DEFAULT_WEB_FRAME: Rect = { x: 0, y: 0, width: 0, height: 0 };
 
-export const unstable_settings = {
-  anchor: "(tabs)",
-};
-
 export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <RootLayoutContent />
+    </AuthProvider>
+  );
+}
+
+function RootLayoutContent() {
   const router = useRouter();
   const initialInsets = initialWindowMetrics?.insets ?? DEFAULT_WEB_INSETS;
   const initialFrame = initialWindowMetrics?.frame ?? DEFAULT_WEB_FRAME;
@@ -101,14 +107,9 @@ export default function RootLayout() {
           {/* If a screen needs the native header, explicitly enable it and set a human title via Stack.Screen options. */}
           {/* in order for ios apps tab switching to work properly, use presentation: "fullScreenModal" for login page, whenever you decide to use presentation: "modal*/}
           <GoalsProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="oauth/callback" />
-            <Stack.Screen name="goal/[id]" options={{ presentation: "card" }} />
-            <Stack.Screen name="goal/create" options={{ presentation: "modal" }} />
-            <Stack.Screen name="goal/preview" options={{ presentation: "modal" }} />
-            <Stack.Screen name="plan/[id]" options={{ presentation: "card" }} />
-          </Stack>
+            <AdaptyProvider>
+              <AuthenticatedApp />
+            </AdaptyProvider>
           </GoalsProvider>
           <StatusBar style="auto" />
         </QueryClientProvider>
@@ -138,3 +139,34 @@ export default function RootLayout() {
     </ThemeProvider>
   );
 }
+
+function AuthenticatedApp() {
+  const { session, loading } = useSupabaseAuth();
+
+  if (loading) return null;
+
+  if (!session) {
+    return (
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="auth/index" />
+        <Stack.Screen name="auth/verify-code" options={{ presentation: "card" }} />
+        <Stack.Screen name="auth/forgot-password" options={{ presentation: "card" }} />
+        <Stack.Screen name="auth/update-password" options={{ presentation: "card" }} />
+      </Stack>
+    );
+  }
+
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="auth/update-password" options={{ presentation: "card" }} />
+      <Stack.Screen name="goal/[id]" options={{ presentation: "card" }} />
+      <Stack.Screen name="goal/create" options={{ presentation: "modal" }} />
+      <Stack.Screen name="goal/preview" options={{ presentation: "modal" }} />`r`n      <Stack.Screen name="wallet" options={{ presentation: "card" }} />
+      <Stack.Screen name="paywall" options={{ presentation: "modal" }} />
+      <Stack.Screen name="plan/[id]" options={{ presentation: "card" }} />
+    </Stack>
+  );
+}
+
+

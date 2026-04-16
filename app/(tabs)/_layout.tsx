@@ -1,16 +1,21 @@
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Platform } from "react-native";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
+import { useSupabaseAuth } from "@/lib/auth-context";
 
 export default function TabLayout() {
   const colors = useColors();
+  const { session, loading } = useSupabaseAuth();
   const insets = useSafeAreaInsets();
   const bottomPadding = Platform.OS === "web" ? 12 : Math.max(insets.bottom, 8);
   const tabBarHeight = 56 + bottomPadding;
+
+  if (loading) return null;
+  if (!session) return <Redirect href={"/auth" as any} />;
 
   return (
     <Tabs
@@ -37,45 +42,35 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "首页",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={24} name="house.fill" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <IconSymbol size={24} name="house.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="popular"
         options={{
           title: "热门",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={24} name="flame.fill" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <IconSymbol size={24} name="flame.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="goals"
         options={{
           title: "目标",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={24} name="target" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <IconSymbol size={24} name="target" color={color} />,
         }}
       />
       <Tabs.Screen
         name="stats"
         options={{
           title: "统计",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={24} name="chart.bar.fill" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <IconSymbol size={24} name="chart.bar.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
           title: "设置",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={24} name="gearshape.fill" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <IconSymbol size={24} name="gearshape.fill" color={color} />,
         }}
       />
     </Tabs>

@@ -90,19 +90,35 @@ export default function HomeScreen() {
               学习计划
             </Text>
           </View>
-          <Pressable
-            onPress={() => router.push("/goal/create")}
-            style={({ pressed }) => [
-              styles.addBtn,
-              {
-                backgroundColor: colors.primary,
-                opacity: pressed ? 0.8 : 1,
-                transform: [{ scale: pressed ? 0.95 : 1 }],
-              },
-            ]}
-          >
-            <IconSymbol name="plus" size={22} color="#fff" />
-          </Pressable>
+          <View style={styles.headerRight}>
+            <Pressable
+              onPress={() => router.push("/wallet")}
+              style={({ pressed }) => [
+                styles.walletBtn,
+                {
+                  backgroundColor: colors.surface,
+                  borderColor: colors.border,
+                  borderWidth: 1,
+                  opacity: pressed ? 0.8 : 1,
+                },
+              ]}
+            >
+              <IconSymbol name="wallet.pass.fill" size={20} color={colors.primary} />
+            </Pressable>
+            <Pressable
+              onPress={() => router.push("/goal/create")}
+              style={({ pressed }) => [
+                styles.addBtn,
+                {
+                  backgroundColor: colors.primary,
+                  opacity: pressed ? 0.8 : 1,
+                  transform: [{ scale: pressed ? 0.95 : 1 }],
+                },
+              ]}
+            >
+              <IconSymbol name="plus" size={22} color="#fff" />
+            </Pressable>
+          </View>
         </View>
 
         {/* Overview Card */}
@@ -253,6 +269,18 @@ const styles = StyleSheet.create({
     lineHeight: 36,
   },
   addBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  walletBtn: {
     width: 44,
     height: 44,
     borderRadius: 22,

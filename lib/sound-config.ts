@@ -10,7 +10,10 @@ export type SoundId =
   | "ding"
   | "ping"
   | "pop"
-  | "alert";
+  | "alert"
+  | "zen"
+  | "dawn"
+  | "crystal";
 
 export interface SoundOption {
   id: SoundId;
@@ -18,7 +21,7 @@ export interface SoundOption {
   description: string;
   fileName: string;
   duration: number; // 毫秒
-  category: "soft" | "medium" | "loud";
+  category: "basic" | "premium";
 }
 
 export const SOUND_OPTIONS: Record<SoundId, SoundOption> = {
@@ -28,7 +31,7 @@ export const SOUND_OPTIONS: Record<SoundId, SoundOption> = {
     description: "柔和的系统默认提醒音",
     fileName: "default.mp3",
     duration: 1000,
-    category: "soft",
+    category: "basic",
   },
   chime: {
     id: "chime",
@@ -36,7 +39,7 @@ export const SOUND_OPTIONS: Record<SoundId, SoundOption> = {
     description: "清脆的风铃声，适合高优先级任务",
     fileName: "chime.mp3",
     duration: 1200,
-    category: "medium",
+    category: "basic",
   },
   bell: {
     id: "bell",
@@ -44,7 +47,7 @@ export const SOUND_OPTIONS: Record<SoundId, SoundOption> = {
     description: "传统的铃铛声，醒目且不刺耳",
     fileName: "bell.mp3",
     duration: 1500,
-    category: "medium",
+    category: "basic",
   },
   ding: {
     id: "ding",
@@ -52,7 +55,7 @@ export const SOUND_OPTIONS: Record<SoundId, SoundOption> = {
     description: "简洁的叮一声，轻快有力",
     fileName: "ding.mp3",
     duration: 800,
-    category: "soft",
+    category: "basic",
   },
   ping: {
     id: "ping",
@@ -60,7 +63,7 @@ export const SOUND_OPTIONS: Record<SoundId, SoundOption> = {
     description: "电子感十足的乒声，现代感强",
     fileName: "ping.mp3",
     duration: 600,
-    category: "soft",
+    category: "basic",
   },
   pop: {
     id: "pop",
@@ -68,7 +71,7 @@ export const SOUND_OPTIONS: Record<SoundId, SoundOption> = {
     description: "轻快的砰声，充满趣味",
     fileName: "pop.mp3",
     duration: 700,
-    category: "medium",
+    category: "basic",
   },
   alert: {
     id: "alert",
@@ -76,7 +79,31 @@ export const SOUND_OPTIONS: Record<SoundId, SoundOption> = {
     description: "明显的警报声，适合紧急提醒",
     fileName: "alert.mp3",
     duration: 2000,
-    category: "loud",
+    category: "basic",
+  },
+  zen: {
+    id: "zen",
+    name: "禅意黎明",
+    description: "如晨钟般深远悠长，极具沉浸感",
+    fileName: "zen.mp3",
+    duration: 3000,
+    category: "premium",
+  },
+  dawn: {
+    id: "dawn",
+    name: "森之静谧",
+    description: "森林清晨的鸟鸣与空气感",
+    fileName: "dawn.mp3",
+    duration: 2500,
+    category: "premium",
+  },
+  crystal: {
+    id: "crystal",
+    name: "水晶竖琴",
+    description: "如露水般纯净的竖琴拨弦声",
+    fileName: "crystal.mp3",
+    duration: 1800,
+    category: "premium",
   },
 };
 

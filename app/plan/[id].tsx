@@ -23,7 +23,7 @@ import {
 } from "@/lib/popular-plans";
 import { useGoals } from "@/lib/goals-context";
 import { ExecutionType } from "@/lib/types";
-import { getApiBaseUrl } from "@/constants/oauth";
+import { getApiBaseUrl } from "@/constants/api";
 import * as Haptics from "expo-haptics";
 
 type GeneratedTask = {
@@ -366,12 +366,12 @@ export default function PlanDetailScreen() {
                 </Text>
               </View>
               <View style={styles.featureList}>
-                {[
+                {(plan.benefits || [
                   { icon: "brain", text: "AI 智能拆解每日学习任务" },
                   { icon: "checkmark.circle.fill", text: "端内闭环执行，无需跳转" },
                   { icon: "chart.bar.fill", text: "进度自动追踪，完成即打卡" },
                   { icon: "bell.fill", text: "每日学习提醒，养成习惯" },
-                ].map((item, i) => (
+                ]).map((item, i) => (
                   <View key={i} style={styles.featureItem}>
                     <View style={[styles.featureIcon, { backgroundColor: categoryColor + "12" }]}>
                       <IconSymbol name={item.icon as any} size={16} color={categoryColor} />

@@ -20,6 +20,7 @@ export default function TaskExecutionScreen() {
   const { state, updateTask, completeTask } = useGoals();
 
   const [isGenerating, setIsGenerating] = useState(false);
+  const [countdown, setCountdown] = useState(30);
   const [error, setError] = useState<string | null>(null);
 
   const goal = state.goals.find((g) => g.id === goalId);
@@ -30,7 +31,8 @@ export default function TaskExecutionScreen() {
     const executionType = getTaskExecutionType(task, goal.title);
     if (executionType && !task.payload && !isGenerating && !error) {
       setIsGenerating(true);
-      generateTaskPayload({ ...task, executionType }, goal.title)
+      setCountdown(30);
+      generateTaskPayload({ ...task, executionType }, goal.title, { isAdvanced: state.inventory.isPremium })
         .then((payload) => {
           updateTask(goal.id, task.id, { payload });
           setIsGenerating(false);
@@ -41,6 +43,16 @@ export default function TaskExecutionScreen() {
         });
     }
   }, [task?.id, task?.payload, goal?.id, isGenerating, error, updateTask]);
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setInterval>;
+    if (isGenerating && countdown > 1) {
+      timer = setInterval(() => {
+        setCountdown((c) => c - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [isGenerating, countdown]);
 
   if (!task || !goal) {
     return (
@@ -96,10 +108,10 @@ export default function TaskExecutionScreen() {
           ) : (
             <View style={styles.loadingBox}>
               <View style={[styles.spinnerWrapper, { borderColor: colors.primary + "33", borderLeftColor: colors.primary }]}> 
-                <Text style={[styles.spinnerText, { color: colors.primary }]}>AI</Text>
+                <Text style={[styles.spinnerText, { color: colors.primary }]}>{countdown}</Text>
               </View>
-              <Text style={[styles.loadingTitle, { color: colors.foreground }]}>{"\u6b63\u5728\u751f\u6210\u5b66\u4e60\u5185\u5bb9..."}</Text>
-              <Text style={[styles.loadingDesc, { color: colors.muted }]}>{"\u8bf7\u7a0d\u7b49\uff0c\u8fd9\u4f1a\u7528\u4e8e\u68c0\u67e5\u4f60\u662f\u5426\u771f\u6b63\u5b8c\u6210\u4efb\u52a1"}</Text>
+              <Text style={[styles.loadingTitle, { color: colors.foreground }]}>{"正在准备练习环境..."}</Text>
+              <Text style={[styles.loadingDesc, { color: colors.muted }]}>{"请稍候，系统正在为你生成个性化学习内容"}</Text>
             </View>
           )}
         </View>

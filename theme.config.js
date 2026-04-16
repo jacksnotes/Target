@@ -10,6 +10,10 @@ const themeColors = {
   warning: { light: '#F59E0B', dark: '#FBBF24' },
   error: { light: '#EF4444', dark: '#F87171' },
   tint: { light: '#4F6EF7', dark: '#6B8AFB' },
+  forest: { light: '#10B981', dark: '#059669' },
+  sunset: { light: '#F97316', dark: '#EA580C' },
+  midnight: { light: '#312E81', dark: '#1E1B4B' },
+  pink: { light: '#F472B6', dark: '#FB7185' },
 };
 
 module.exports = { themeColors };

@@ -2,7 +2,7 @@ import { Platform } from "react-native";
 
 import themeConfig from "@/theme.config";
 
-export type ColorScheme = "light" | "dark";
+export type ColorScheme = "light" | "dark" | "forest" | "sunset" | "midnight" | "pink";
 
 export const ThemeColors = themeConfig.themeColors;
 
@@ -11,16 +11,19 @@ type ThemeColorName = keyof ThemeColorTokens;
 type SchemePalette = Record<ColorScheme, Record<ThemeColorName, string>>;
 type SchemePaletteItem = SchemePalette[ColorScheme];
 
-function buildSchemePalette(colors: ThemeColorTokens): SchemePalette {
-  const palette: SchemePalette = {
-    light: {} as SchemePalette["light"],
-    dark: {} as SchemePalette["dark"],
-  };
+function buildSchemePalette(colors: ThemeColorTokens): Record<ColorScheme, SchemePaletteItem> {
+  const schemes: ColorScheme[] = ["light", "dark", "forest", "sunset", "midnight", "pink"];
+  const palette = {} as Record<ColorScheme, SchemePaletteItem>;
 
-  (Object.keys(colors) as ThemeColorName[]).forEach((name) => {
-    const swatch = colors[name];
-    palette.light[name] = swatch.light;
-    palette.dark[name] = swatch.dark;
+  schemes.forEach((s) => {
+    palette[s] = {} as SchemePaletteItem;
+    (Object.keys(colors) as ThemeColorName[]).forEach((name) => {
+      if ((name as string) === (s as string)) {
+        palette[s].primary = colors[name].light;
+      }
+      const token = colors[name] as any;
+      palette[s][name] = token[s] || token.light; 
+    });
   });
 
   return palette;
@@ -55,6 +58,10 @@ function buildRuntimePalette(scheme: ColorScheme): RuntimePalette {
 export const Colors = {
   light: buildRuntimePalette("light"),
   dark: buildRuntimePalette("dark"),
+  forest: buildRuntimePalette("forest"),
+  sunset: buildRuntimePalette("sunset"),
+  midnight: buildRuntimePalette("midnight"),
+  pink: buildRuntimePalette("pink"),
 } satisfies Record<ColorScheme, RuntimePalette>;
 
 export type ThemeColorPalette = (typeof Colors)[ColorScheme];
